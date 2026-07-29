@@ -1,0 +1,28 @@
+# macOS clutter.
+._*
+.DS_Store
+
+# Python build artifacts.
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Virtual environments.
+.venv/
+venv/
+env/
+
+# Local dev tools and agent state.
+.zcode/
+.vscode/
+.idea/
+
+# Streamlit secrets.
+.streamlit/
+
+# Optional pipeline caches.
+.cache/
+.pyright/

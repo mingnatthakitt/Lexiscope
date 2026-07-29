@@ -1,0 +1,30 @@
+# Files and directories that should never be copied into the Docker image.
+# Keep this file aligned with .gitignore so the image and the repo stay in sync.
+
+# macOS resource forks everywhere.
+._*
+.DS_Store
+
+# Python build artifacts.
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Virtual environments.
+.venv/
+venv/
+env/
+
+# Local dev tools and agent state.
+.zcode/
+.vscode/
+.idea/
+
+# Git metadata.
+.git/
+.gitignore
+
+# Documentation files are small and harmless to ship.
+# Comment out the line below if you want to exclude the README from the image.
+# README.md

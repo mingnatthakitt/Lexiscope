@@ -1,0 +1,59 @@
+# =============================================================================
+#  Lexiscope -- Render.com Blueprint
+# =============================================================================
+#  Tells Render how to deploy the Streamlit app as a free Web Service.
+#  To deploy:
+#    1. Push this repo to GitHub.
+#    2. Sign in to https://render.com with your GitHub account.
+#    3. Click "New" -> "Blueprint".
+#    4. Connect this repo. Render will detect render.yaml and apply it.
+#    5. First build takes ~6-10 minutes because the spaCy models install
+#       along with the Python dependencies.
+#    6. Your URL will be https://lexiscope.onrender.com (or whatever name
+#       you set below).
+#
+#  Free tier notes:
+#    - 750 hours / month of compute (enough for a demo).
+#    - Sleeps after 15 minutes of inactivity. First request after sleep
+#      takes 30-60 seconds to wake up.
+#    - 512 MB RAM. en_core_web_md loads fine (~600 MB peak), but the
+#      cached model and the user session state share that memory.
+# =============================================================================
+
+services:
+  - type: web
+    name: lexiscope
+    runtime: python
+    plan: free
+    region: oregon
+    autoDeploy: false
+    healthCheckPath: /_stcore/health
+    buildCommand: |
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      python -m spacy download en_core_web_sm
+      python -m spacy download en_core_web_md
+    startCommand: |
+      streamlit run app.py \
+        --server.port=$PORT \
+        --server.address=0.0.0.0 \
+        --server.headless=true \
+        --server.fileWatcherType=none \
+        --server.enableCORS=false \
+        --server.enableXsrfProtection=false \
+        --browser.gatherUsageStats=false
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: 1
+      - key: STREAMLIT_THEME_BASE
+        value: dark
+      - key: STREAMLIT_BROWSER_GATHER_USAGE_STATS
+        value: false
+      - key: STREAMLIT_SERVER_FILE_WATCHER_TYPE
+        value: none
+      - key: STREAMLIT_SERVER_ENABLE_CORS
+        value: false
+      - key: STREAMLIT_SERVER_ENABLE_XSRF_PROTECTION
+        value: false
+      - key: STREAMLIT_GLOBAL_DEVELOPMENT_MODE
+        value: false
